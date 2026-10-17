@@ -1,0 +1,9 @@
+*.blend
+*.blend1
+*.blend2
+*.lnk
+*.log
+__pycache__/
+node_modules/
+backups/
+work/

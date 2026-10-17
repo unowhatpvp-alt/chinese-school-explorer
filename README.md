@@ -1,2 +1,38 @@
-# chinese-school-explorer
-Interactive 3D Chinese school explorer, exported from the editable Blender model.
+# 中国学校教学楼 · V1.1 网页漫游
+
+由完整 Blender V1 工程的真实几何导出，可在浏览器探索五层教学楼、教室、教师办公室、男女卫生间、走廊和两端楼梯。发布包约 32 MB，包含本地 Three.js 依赖；不包含 `.blend` 母版。
+
+## 使用
+
+- **环绕**：鼠标左键旋转、右键平移、滚轮缩放；触屏单指旋转，双指缩放与平移。
+- **步行**：W/A/S/D 或方向键移动，Shift 加速；单击画面控制视角，Esc 释放鼠标。触屏使用左侧摇杆移动、右侧画面拖动转向。
+- **导航**：选择楼层或房间，使用“隐藏当前层”“显示屋顶”查看内部，也可启动自动参观或返回建筑外观。
+- **画质**：设置内提供流畅、均衡、精细模式及实时性能数据；手机默认 `low`（流畅）。
+
+步行采用墙体、门洞与楼梯坡面的简化碰撞，没有逐件家具物理碰撞。尚未在真实 iPhone Safari 或 Android 手机上测试，不承诺 30 FPS；性能面板显示当前设备的实时测量。
+
+## 本地预览与部署
+
+在仓库目录运行：
+
+```sh
+python -m http.server 8000 --bind 127.0.0.1
+```
+
+浏览器打开 [本地预览](http://127.0.0.1:8000/)。请通过 HTTP 加载，直接双击 `index.html` 的 `file://` 模式不能可靠获取模型与模块。
+
+项目是纯静态网站，无需安装构建依赖。GitHub Pages 使用仓库子路径 `/chinese-school-explorer/`；HTML、模块和模型均采用相对路径，可直接部署仓库根目录。请保留 `.nojekyll`。
+
+## 模型与加载策略
+
+`assets/` 包含 **14 个真实 GLB**：29 种可复用资产母版、五层完整几何、五层结构 shell，以及场地、外立面和屋顶。桌椅、门窗、洁具等通过实例化复用；实例位置、房间、摄像机和碰撞数据见 `assets/manifest.json` 及配套 JSON。
+
+首屏加载五层轻量 shell 和门窗；进入室内时按需加载当前层完整几何与家具，替换该层 shell。坐标单位为米，采用 Three.js 的 Y 轴向上。材质使用简化 PBR；微小文字的网页省略范围由导出流程记录，母版工程保持完整。
+
+来源母版：`ChineseSchool_V1.blend`，Blender 5.2.2 LTS。
+
+```text
+SHA-256: f3dba0aea7a8e16a7a03d69c31f448336f263b8cd2788549cb9125d111230ce7
+```
+
+Three.js 0.186.1 的 MIT 许可证随包保留于 `vendor/THREE-LICENSE.txt`。

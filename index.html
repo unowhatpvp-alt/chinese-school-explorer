@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3f2ef">
+  <meta name="description" content="中国学校教学楼 V1.1。由完整 Blender V1 工程转换的交互式校园建筑浏览。">
+  <title>中国学校 · 建筑漫游</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+  <main id="app">
+    <div id="viewport" aria-label="教学楼三维场景"></div>
+    <div id="markers" aria-hidden="true"></div>
+    <header class="topbar glass">
+      <a class="brand" href="./" aria-label="返回教学楼外观"><span class="brand-symbol" aria-hidden="true">学</span><span><strong>中国学校</strong><small>CHINESE SCHOOL / V1.1</small></span></a>
+      <div class="top-actions">
+        <span id="sceneStatus" class="scene-status">准备场景</span>
+        <button id="infoButton" class="icon-button" title="项目与操作说明" aria-label="项目与操作说明">ⓘ</button>
+        <button id="fullscreenButton" class="icon-button" title="全屏" aria-label="切换全屏"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+      </div>
+    </header>
+
+    <aside id="explorePanel" class="explore-panel glass" aria-label="建筑导航">
+      <button id="panelHandle" class="panel-handle" aria-expanded="true"><span></span><b>探索教学楼</b><svg viewBox="0 0 24 24"><path d="m7 14 5-5 5 5"/></svg></button>
+      <div class="panel-content">
+        <div class="section-heading"><span>楼层</span><button id="showAll" class="text-button selected">显示全楼</button></div>
+        <div id="floorButtons" class="floor-buttons" aria-label="选择楼层"></div>
+        <div class="visibility-controls"><label><input id="roofToggle" type="checkbox" checked><span>显示屋顶</span></label><button id="hideFloor" class="text-button">隐藏当前层</button></div>
+        <div class="rule"></div>
+        <div class="section-heading"><span id="roomsHeading">一层空间</span><span id="roomCount" class="muted"></span></div>
+        <div id="roomList" class="room-list" aria-label="房间导航"></div>
+        <button id="exteriorButton" class="exterior-button"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v11h-7v-7h-4v7H3Z"/></svg><span>返回建筑外观</span><span aria-hidden="true">↗</span></button>
+      </div>
+    </aside>
+
+    <div id="locationPill" class="location-pill glass" hidden><span class="location-dot"></span><span id="locationText"></span><button id="closeLocation" aria-label="关闭房间视角">×</button></div>
+    <div class="orientation" aria-hidden="true"><span id="compassNeedle">↑</span><b>N</b></div>
+
+    <div id="loading" class="loading-screen"><div class="loading-card"><span class="building-line" aria-hidden="true">▥</span><span class="eyebrow">ARCHITECTURE / INTERACTIVE</span><h1>走进中国课堂</h1><p id="loadingText">正在准备教学楼</p><div class="progress-track"><div id="loadingProgress"></div></div><small>真实比例 · 完整内部空间 · 自由探索</small></div></div>
+    <div id="backgroundLoading" class="background-loading glass" hidden><span class="spinner"></span><span id="backgroundLoadingText">正在载入</span></div>
+    <section id="errorPanel" class="error-panel glass" hidden role="alert"><strong>场景暂时无法载入</strong><p id="errorText"></p><button id="retryButton" class="dark-button">重试加载</button></section>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <div id="walkHints" class="walk-hints glass" hidden><span class="desktop-hint">W A S D 移动 · Shift 加速 · 单击画面控制视角 · Esc 释放鼠标</span><span class="mobile-hint">左侧摇杆移动 · 右侧画面拖动转向</span><span class="walk-label">步行导览 / 简化墙体碰撞</span></div>
+    <div id="crosshair" hidden aria-hidden="true"></div>
+    <div id="joystick" class="joystick" hidden aria-label="移动摇杆"><span class="joystick-ring"></span><span id="joystickKnob" class="joystick-knob"></span><span class="joystick-label">移动</span></div>
+    <div id="touchLookHint" class="touch-look-hint" hidden aria-hidden="true">拖动转向 <span>↔</span></div>
+
+    <footer class="bottom-dock glass">
+      <div class="mode-switch" role="group" aria-label="浏览方式"><button id="orbitMode" class="active" title="旋转、缩放与平移"><svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 2 8M4 4v6h6"/><circle cx="12" cy="12" r="2"/></svg><span>环绕</span></button><button id="walkMode" title="第一人称步行"><svg viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="m9 22 3-7 3 7m-8-9 3-5 4 1 3 5m-5-5-1 7"/></svg><span>步行</span></button></div>
+      <span class="dock-divider"></span>
+      <button id="tourButton" class="dock-button" title="自动参观路线"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></svg><span>自动参观</span></button>
+      <button id="settingsButton" class="dock-button settings-button" aria-expanded="false" title="画质与性能"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="3"/><circle cx="16" cy="17" r="3"/></svg><span>设置</span></button>
+    </footer>
+    <section id="settingsPanel" class="settings-panel glass" hidden aria-label="画质设置"><div class="section-heading"><span>画质与显示</span><button id="closeSettings" class="icon-button" aria-label="关闭设置">×</button></div><label class="setting-row"><span>渲染质量</span><select id="qualitySelect"><option value="low">流畅</option><option value="medium">均衡</option><option value="high">精细</option></select></label><label class="setting-row"><span>远景室内家具</span><input id="distantFurniture" type="checkbox"></label><label class="setting-row"><span>显示性能数据</span><input id="statsToggle" type="checkbox"></label><p class="settings-note">手机默认流畅模式。家具按所选楼层加载，进入室内后显示该层完整细节。</p><div id="performance" class="performance" hidden><span id="perfFps">等待测量</span><span id="perfCalls"></span><span id="perfTriangles"></span><span id="perfMemory"></span></div></section>
+
+    <dialog id="infoDialog"><form method="dialog"><button class="dialog-close icon-button" aria-label="关闭说明">×</button><span class="eyebrow">MODEL / V1 → WEB / V1.1</span><h2>一栋可以走进去的教学楼</h2><p>模型来自中国学校教学楼 Blender V1 工程。五层建筑包含普通教室、教师办公室、男女卫生间，以及连续走廊和两端楼梯。</p><dl><dt>环绕浏览</dt><dd>鼠标左键旋转，右键平移，滚轮缩放。触屏单指旋转，双指缩放与平移。</dd><dt>步行导览</dt><dd>使用 W A S D 与鼠标，或触屏摇杆与右侧拖动。模型按墙体、门洞及楼梯坡面进行简化碰撞；家具和局部装饰没有逐件物理碰撞。可从北侧入口进入，也可通过房间导航抵达室内。</dd><dt>性能策略</dt><dd>建筑结构逐层加载，家具只加载当前查看楼层。切换画质可降低像素密度和阴影负担。面板中的 FPS、绘制调用和三角形数量均为当前浏览器实际测量。</dd></dl><p class="source-line" id="sourceLine">来源版本：正在读取模型清单</p><button class="dark-button">开始探索</button></form></dialog>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
