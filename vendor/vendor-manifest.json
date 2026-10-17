@@ -1,0 +1,15 @@
+{
+  "three": "0.186.1",
+  "source": "https://registry.npmjs.org/three/-/three-0.186.1.tgz",
+  "license": "MIT",
+  "files": [
+    "package/LICENSE",
+    "package/build/three.core.js",
+    "package/build/three.module.js",
+    "package/examples/jsm/controls/OrbitControls.js",
+    "package/examples/jsm/environments/RoomEnvironment.js",
+    "package/examples/jsm/loaders/GLTFLoader.js",
+    "package/examples/jsm/utils/BufferGeometryUtils.js",
+    "package/examples/jsm/utils/SkeletonUtils.js"
+  ]
+}
